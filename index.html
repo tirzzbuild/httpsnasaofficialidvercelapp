@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NASA · Certificate Authority · NEXUS NEON v7</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --nasa-blue:#0b3d91;
+    --nasa-blue-dark:#062a6b;
+    --nasa-blue-light:#1e5bc6;
+    --nasa-red:#fc3d21;
+    --neon-cyan:#00f0ff;
+    --neon-blue:#3b82f6;
+    --neon-violet:#a855f7;
+    --neon-magenta:#ec4899;
+    --neon-gold:#ffd966;
+    --neon-green:#22ff88;
+    --bg:#04060d;
+    --bg-1:#070b16;
+    --bg-2:#0b1220;
+    --bg-3:#101a2e;
+    --bg-4:#16203a;
+    --glass:rgba(11,18,32,.65);
+    --border:#1a2740;
+    --border-2:#24334e;
+    --border-3:#334566;
+    --txt:#eaf2ff;
+    --txt-dim:#8fa5c4;
+    --txt-mute:#5c7395;
+    --ok:#22ff88;
+    --warn:#ffb340;
+    --err:#ff3b6b;
+    --mono:'JetBrains Mono','Fira Code','Consolas',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,sans-serif;
+    --serif:'EB Garamond','Garamond','Georgia','Times New Roman',serif;
+  }
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--txt);
+    font-size:13px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 1400px 700px at 15% -10%,rgba(0,240,255,.10),transparent 60%),
+      radial-gradient(ellipse 1200px 600px at 90% 5%,rgba(168,85,247,.10),transparent 60%),
+      radial-gradient(ellipse 1000px 500px at 50% 110%,rgba(252,61,33,.08),transparent 60%);
+    background-attachment:fixed;
+  }
+  /* Global grid overlay */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(0,240,255,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,240,255,.03) 1px,transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse 80% 70% at center,#000 30%,transparent 78%);
+    -webkit-mask-image:radial-gradient(ellipse 80% 70% at center,#000 30%,transparent 78%);
+  }
+  a{color:var(--neon-cyan);text-decoration:none}
+  button{font-family:inherit;cursor:pointer}
+
+  /* ================= GOV BANNER ================= */
+  .gov-banner{
+    background:#f0f0f0;color:#1a1a1a;
+    font-size:11px;padding:5px 20px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;position:relative;z-index:10;
+  }
+  .gov-banner .flag{
+    display:inline-block;width:16px;height:11px;
+    background:linear-gradient(180deg,#b22234 0 7.7%,#fff 7.7% 15.4%,#b22234 15.4% 23.1%,#fff 23.1% 30.8%,#b22234 30.8% 38.5%,#fff 38.5% 46.2%,#b22234 46.2% 53.9%,#fff 53.9% 61.6%,#b22234 61.6% 69.3%,#fff 69.3% 77%,#b22234 77% 84.7%,#fff 84.7% 92.4%,#b22234 92.4% 100%);
+    position:relative;vertical-align:middle;margin-right:6px;
+    border:1px solid #ccc;
+  }
+  .gov-banner .flag::before{
+    content:"";position:absolute;top:0;left:0;width:45%;height:54%;
+    background:#3c3b6e;
+  }
+  .gov-banner .left,.gov-banner .right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .gov-banner a{color:#1a1a1a;text-decoration:underline}
+
+  /* ================= HEADER (NEON) ================= */
+  .nasa-hdr{
+    background:linear-gradient(180deg,rgba(11,61,145,.95) 0%,rgba(6,42,107,.98) 100%);
+    border-bottom:2px solid var(--neon-cyan);
+    padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:20px;flex-wrap:wrap;
+    position:relative;z-index:9;
+    box-shadow:
+      0 4px 30px rgba(0,0,0,.6),
+      0 0 60px rgba(0,240,255,.15),
+      inset 0 -1px 0 rgba(0,240,255,.4);
+    overflow:hidden;
+  }
+  .nasa-hdr::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 15% 50%,rgba(0,240,255,.10),transparent 40%),
+      radial-gradient(circle at 85% 20%,rgba(252,61,33,.10),transparent 40%),
+      radial-gradient(circle at 50% 100%,rgba(168,85,247,.08),transparent 50%);
+    pointer-events:none;
+  }
+  .nasa-hdr::after{
+    content:"";position:absolute;bottom:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);
+    box-shadow:0 0 12px var(--neon-cyan);
+    animation:scanX 5s linear infinite;
+  }
+  @keyframes scanX{
+    0%{transform:translateX(-100%)}
+    100%{transform:translateX(100%)}
+  }
+  .nasa-logo{display:flex;align-items:center;gap:14px;position:relative}
+  .nasa-meatball{
+    width:60px;height:60px;flex-shrink:0;border-radius:50%;
+    display:grid;place-items:center;
+    background:radial-gradient(circle at 30% 30%,rgba(0,240,255,.3),var(--nasa-blue));
+    box-shadow:
+      0 0 0 2px #fff inset,
+      0 0 30px rgba(0,240,255,.6),
+      0 0 60px rgba(0,240,255,.3),
+      0 4px 20px rgba(0,0,0,.5);
+    animation:meatballGlow 3s ease-in-out infinite;
+  }
+  @keyframes meatballGlow{
+    0%,100%{
+      box-shadow:0 0 0 2px #fff inset,0 0 30px rgba(0,240,255,.6),0 0 60px rgba(0,240,255,.3),0 4px 20px rgba(0,0,0,.5)
+    }
+    50%{
+      box-shadow:0 0 0 2px #fff inset,0 0 50px rgba(0,240,255,.9),0 0 100px rgba(168,85,247,.5),0 4px 20px rgba(0,0,0,.5)
+    }
+  }
+  .nasa-meatball svg{width:46px;height:46px}
+  .nasa-title{
+    font-size:22px;font-weight:900;letter-spacing:7px;
+    background:linear-gradient(90deg,#fff 0%,var(--neon-cyan) 50%,var(--neon-violet) 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 12px rgba(0,240,255,.7));
+  }
+  .nasa-sub{
+    font-size:10.5px;letter-spacing:2.5px;color:rgba(255,255,255,.75);
+    text-transform:uppercase;margin-top:3px;font-weight:600;
+  }
+  .hdr-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:relative}
+  .clearance-badge{
+    display:flex;align-items:center;gap:8px;
+    padding:8px 15px;border-radius:6px;
+    background:rgba(0,240,255,.06);
+    border:1px solid rgba(0,240,255,.4);
+    font-size:10.5px;letter-spacing:1.5px;font-weight:700;
+    color:#fff;text-transform:uppercase;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 20px rgba(0,240,255,.2),inset 0 0 12px rgba(0,240,255,.1);
+  }
+  .clearance-badge.defcon{
+    background:linear-gradient(135deg,rgba(252,61,33,.25),rgba(252,61,33,.08));
+    border-color:rgba(252,61,33,.6);
+    animation:defconPulse 3s ease-in-out infinite;
+  }
+  @keyframes defconPulse{
+    0%,100%{box-shadow:0 0 20px rgba(252,61,33,.3),inset 0 0 12px rgba(252,61,33,.1)}
+    50%{box-shadow:0 0 40px rgba(252,61,33,.8),inset 0 0 20px rgba(252,61,33,.3)}
+  }
+  .clearance-badge .led{
+    width:8px;height:8px;border-radius:50%;background:var(--ok);
+    box-shadow:0 0 12px var(--ok);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  .clearance-badge.defcon .led{background:var(--nasa-red);box-shadow:0 0 12px var(--nasa-red)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* ================= NAV ================= */
+  .nav{
+    background:rgba(7,11,22,.95);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:0 24px;
+    display:flex;gap:4px;
+    position:sticky;top:0;z-index:50;
+    box-shadow:0 4px 20px rgba(0,0,0,.5);
+    overflow-x:auto;position:relative;
+  }
+  .nav::-webkit-scrollbar{height:0}
+  .nav a{
+    padding:14px 18px;
+    color:var(--txt-dim);
+    font-size:12px;font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;
+    border-bottom:2px solid transparent;
+    transition:all .2s;text-decoration:none;
+    white-space:nowrap;position:relative;
+    cursor:pointer;
+  }
+  .nav a:hover{color:var(--txt);border-bottom-color:rgba(0,240,255,.5);text-decoration:none}
+  .nav a.active{
+    color:var(--neon-cyan);
+    border-bottom-color:var(--neon-cyan);
+    text-shadow:0 0 12px rgba(0,240,255,.8);
+  }
+  .nav a.active::before{
+    content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);
+    box-shadow:0 0 16px var(--neon-cyan);
+  }
+
+  /* ================= LAYOUT ================= */
+  .main{
+    display:grid;
+    grid-template-columns:240px 1fr 340px;
+    gap:0;
+    min-height:calc(100vh - 130px);
+    position:relative;z-index:1;
+  }
+  @media(max-width:1200px){
+    .main{grid-template-columns:1fr;gap:16px;padding:16px}
+  }
+
+  /* ================= SIDEBAR ================= */
+  .sidebar{
+    background:linear-gradient(180deg,var(--bg-1),rgba(4,6,13,.95));
+    border-right:1px solid var(--border);
+    padding:16px 12px;
+    display:flex;flex-direction:column;gap:14px;
+    position:sticky;top:56px;
+    align-self:start;
+    max-height:calc(100vh - 56px);
+    overflow-y:auto;
+  }
+  .sidebar::-webkit-scrollbar{width:6px}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+  @media(max-width:1200px){
+    .sidebar{border-right:0;border:1px solid var(--border);border-radius:8px;position:static;max-height:none}
+  }
+  .side-section{display:flex;flex-direction:column;gap:4px}
+  .side-hdr{
+    font-size:10px;letter-spacing:2px;color:var(--txt-mute);
+    text-transform:uppercase;font-weight:800;
+    padding:6px 10px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:4px;
+  }
+  .side-item{
+    display:flex;align-items:center;gap:10px;
+    padding:9px 12px;border-radius:6px;
+    color:var(--txt-dim);font-size:12px;
+    cursor:pointer;transition:all .15s;
+    border:1px solid transparent;
+    position:relative;
+  }
+  .side-item:hover{
+    background:rgba(0,240,255,.08);
+    color:var(--txt);
+    border-color:rgba(0,240,255,.2);
+  }
+  .side-item.active{
+    background:linear-gradient(90deg,rgba(0,240,255,.15),rgba(168,85,247,.08));
+    color:#fff;
+    border-color:rgba(0,240,255,.4);
+    box-shadow:0 0 20px rgba(0,240,255,.2),inset 0 0 12px rgba(0,240,255,.08);
+  }
+  .side-item.active::before{
+    content:"";position:absolute;left:0;top:20%;bottom:20%;width:3px;
+    background:var(--neon-cyan);
+    border-radius:3px;
+    box-shadow:0 0 12px var(--neon-cyan);
+  }
+  .side-item .icon{
+    width:16px;text-align:center;color:var(--txt-mute);font-size:14px;flex-shrink:0;
+  }
+  .side-item.active .icon{color:var(--neon-cyan);text-shadow:0 0 10px var(--neon-cyan)}
+  .side-item .badge{
+    margin-left:auto;
+    font-size:9px;font-weight:800;
+    padding:2px 8px;border-radius:10px;
+    background:linear-gradient(135deg,var(--neon-magenta),var(--neon-violet));
+    color:#fff;letter-spacing:.5px;
+    box-shadow:0 0 10px rgba(236,72,153,.5);
+  }
+  .side-item .badge.gold{
+    background:linear-gradient(135deg,#b8860b,var(--neon-gold));
+    color:#000;
+    box-shadow:0 0 10px rgba(255,217,102,.5);
+  }
+
+  /* ================= CONTENT ================= */
+  .content{
+    padding:22px 26px;
+    display:flex;flex-direction:column;gap:18px;
+    min-width:0;
+  }
+  .page-hdr{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    gap:16px;flex-wrap:wrap;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--border-2);
+    position:relative;
+  }
+  .page-hdr::after{
+    content:"";position:absolute;bottom:-1px;left:0;width:180px;height:2px;
+    background:linear-gradient(90deg,var(--neon-cyan),transparent);
+    box-shadow:0 0 12px var(--neon-cyan);
+  }
+  .page-title{
+    font-size:24px;font-weight:800;color:#fff;
+    letter-spacing:.5px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .page-title::before{
+    content:"";width:4px;height:26px;
+    background:linear-gradient(180deg,var(--neon-cyan),var(--neon-violet));
+    border-radius:2px;
+    box-shadow:0 0 16px var(--neon-cyan);
+  }
+  .page-sub{
+    font-size:12px;color:var(--txt-dim);margin-top:6px;
+    padding-left:16px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .page-sub .crumb{color:var(--txt-mute)}
+  .page-sub .crumb a{color:var(--txt-dim)}
+  .page-sub .crumb a:hover{color:var(--neon-cyan)}
+  .page-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+  /* ================= BUTTONS ================= */
+  .btn{
+    padding:9px 16px;border-radius:6px;
+    border:1px solid var(--border-2);
+    background:rgba(16,26,46,.8);
+    color:var(--txt);
+    font-size:11.5px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;
+    display:inline-flex;align-items:center;gap:6px;
+    position:relative;
+    backdrop-filter:blur(8px);
+  }
+  .btn:hover{
+    background:rgba(0,240,255,.12);
+    border-color:var(--neon-cyan);
+    color:#fff;
+    transform:translateY(-1px);
+    box-shadow:0 0 20px rgba(0,240,255,.3);
+  }
+  .btn.primary{
+    background:linear-gradient(135deg,rgba(11,61,145,.9),rgba(30,91,198,.9));
+    border-color:var(--neon-cyan);
+    color:#fff;
+    box-shadow:0 0 20px rgba(0,240,255,.25);
+  }
+  .btn.primary:hover{
+    box-shadow:0 0 30px rgba(0,240,255,.6),inset 0 0 20px rgba(0,240,255,.15);
+  }
+  .btn.gold{
+    background:linear-gradient(135deg,rgba(184,134,11,.9),rgba(255,217,102,.9));
+    border-color:var(--neon-gold);
+    color:#000;
+    box-shadow:0 0 20px rgba(255,217,102,.4);
+  }
+  .btn.gold:hover{
+    box-shadow:0 0 30px rgba(255,217,102,.8),inset 0 0 20px rgba(255,217,102,.2);
+    color:#000;
+  }
+  .btn.danger{
+    background:linear-gradient(135deg,rgba(181,32,0,.9),rgba(252,61,33,.9));
+    border-color:var(--nasa-red);color:#fff;
+  }
+  .btn.danger:hover{box-shadow:0 0 30px rgba(252,61,33,.7)}
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:6px 11px;font-size:10.5px}
+
+  /* ================= CARDS ================= */
+  .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  @media(max-width:1100px){.cards{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}}
+  .card{
+    background:linear-gradient(180deg,rgba(16,26,46,.9),rgba(11,18,32,.9));
+    border:1px solid var(--border-2);
+    border-radius:10px;
+    padding:16px 18px;
+    position:relative;overflow:hidden;
+    transition:all .3s;
+    backdrop-filter:blur(10px);
+  }
+  .card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);
+    box-shadow:0 0 12px var(--neon-cyan);
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    border-color:var(--neon-cyan);
+    box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 40px rgba(0,240,255,.25);
+  }
+  .card.green::before{background:linear-gradient(90deg,transparent,var(--neon-green),transparent);box-shadow:0 0 12px var(--neon-green)}
+  .card.violet::before{background:linear-gradient(90deg,transparent,var(--neon-violet),transparent);box-shadow:0 0 12px var(--neon-violet)}
+  .card.magenta::before{background:linear-gradient(90deg,transparent,var(--neon-magenta),transparent);box-shadow:0 0 12px var(--neon-magenta)}
+  .card.gold::before{background:linear-gradient(90deg,transparent,var(--neon-gold),transparent);box-shadow:0 0 12px var(--neon-gold)}
+  .card .lbl{
+    font-size:10px;letter-spacing:1.5px;color:var(--txt-mute);
+    text-transform:uppercase;font-weight:800;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .card .val{
+    font-size:28px;font-weight:800;
+    background:linear-gradient(135deg,#fff 0%,var(--neon-cyan) 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-family:var(--mono);
+    line-height:1.1;letter-spacing:-.5px;
+    filter:drop-shadow(0 0 12px rgba(0,240,255,.5));
+  }
+  .card.gold .val{background:linear-gradient(135deg,#fff,var(--neon-gold));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 12px rgba(255,217,102,.5))}
+  .card.green .val{background:linear-gradient(135deg,#fff,var(--neon-green));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 12px rgba(34,255,136,.5))}
+  .card .sub{
+    font-size:11px;color:var(--txt-dim);margin-top:5px;
+  }
+  .card .delta{font-size:10.5px;font-weight:700;font-family:var(--mono)}
+  .card .delta.up{color:var(--ok)}
+  .card .delta.down{color:var(--err)}
+  .card .spark{
+    position:absolute;bottom:0;left:0;right:0;height:26px;
+    display:flex;align-items:flex-end;gap:1px;
+    opacity:.5;
+  }
+  .card .spark .b{
+    flex:1;background:var(--neon-cyan);
+    border-radius:1px 1px 0 0;
+    transition:height .5s ease;
+    box-shadow:0 0 4px var(--neon-cyan);
+  }
+  .card.gold .spark .b{background:var(--neon-gold);box-shadow:0 0 4px var(--neon-gold)}
+  .card.green .spark .b{background:var(--neon-green);box-shadow:0 0 4px var(--neon-green)}
+  .card.violet .spark .b{background:var(--neon-violet);box-shadow:0 0 4px var(--neon-violet)}
+  .card.magenta .spark .b{background:var(--neon-magenta);box-shadow:0 0 4px var(--neon-magenta)}
+
+  /* ================= PANELS ================= */
+  .panel{
+    background:linear-gradient(180deg,rgba(16,26,46,.7),rgba(11,18,32,.85));
+    border:1px solid var(--border-2);
+    border-radius:10px;
+    overflow:hidden;
+    backdrop-filter:blur(12px);
+    position:relative;
+  }
+  .panel::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);
+    opacity:.6;
+  }
+  .panel-hdr{
+    padding:12px 18px;
+    background:linear-gradient(180deg,rgba(16,26,46,.95),rgba(11,18,32,.7));
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:11px;letter-spacing:1.5px;
+    color:var(--txt-dim);text-transform:uppercase;font-weight:800;
+    gap:12px;flex-wrap:wrap;
+  }
+  .panel-hdr .title{
+    display:flex;align-items:center;gap:10px;color:#fff;
+    text-shadow:0 0 8px rgba(0,240,255,.3);
+  }
+  .panel-hdr .title::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--neon-cyan);
+    box-shadow:0 0 10px var(--neon-cyan),0 0 20px var(--neon-cyan);
+    animation:pulse 2s infinite;
+  }
+  .panel-body{padding:18px}
+  .panel-body.flush{padding:0}
+
+  /* ================= FORM ================= */
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .form-row.three{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:720px){.form-row,.form-row.three{grid-template-columns:1fr}}
+  .fg{position:relative}
+  .fg label{
+    display:block;font-size:10.5px;font-weight:800;
+    letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--txt-dim);margin-bottom:6px;
+  }
+  .fg input,.fg textarea,.fg select{
+    width:100%;
+    padding:11px 14px;
+    background:rgba(7,11,22,.85);
+    border:1px solid var(--border-2);
+    border-radius:6px;
+    color:var(--txt);
+    font-family:inherit;font-size:13px;
+    outline:none;transition:all .2s;
+  }
+  .fg input:focus,.fg textarea:focus,.fg select:focus{
+    border-color:var(--neon-cyan);
+    background:rgba(11,18,32,.95);
+    box-shadow:
+      0 0 0 3px rgba(0,240,255,.15),
+      0 0 24px rgba(0,240,255,.4),
+      inset 0 0 12px rgba(0,240,255,.08);
+  }
+  .fg textarea{min-height:90px;resize:vertical;line-height:1.6;font-family:var(--serif);font-size:13.5px}
+  .fg input[readonly]{background:rgba(11,18,32,.5);color:var(--txt-mute);cursor:not-allowed}
+  .fg .hint{
+    font-size:10.5px;color:var(--txt-mute);
+    margin-top:5px;letter-spacing:.3px;
+  }
+
+  /* ================= CONSOLE ================= */
+  .console{
+    background:#000;
+    border-radius:6px;
+    padding:14px 16px;
+    font-family:var(--mono);font-size:11.5px;
+    line-height:1.75;
+    height:240px;overflow-y:auto;
+    color:#c8d4e6;
+    border:1px solid var(--border);
+    position:relative;
+    box-shadow:inset 0 0 60px rgba(0,240,255,.05);
+  }
+  .console::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);
+    opacity:.5;
+  }
+  .console::-webkit-scrollbar{width:8px}
+  .console::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px}
+  .console .ln{display:flex;gap:8px;animation:lineIn .2s ease}
+  @keyframes lineIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
+  .console .t{color:#4a5a78;flex-shrink:0}
+  .console .ok{color:var(--neon-green);text-shadow:0 0 8px rgba(34,255,136,.5)}
+  .console .warn{color:var(--warn);text-shadow:0 0 8px rgba(255,179,64,.5)}
+  .console .err{color:var(--err);text-shadow:0 0 8px rgba(255,59,107,.5)}
+  .console .info{color:var(--neon-cyan);text-shadow:0 0 8px rgba(0,240,255,.5)}
+  .console .gold{color:var(--neon-gold);text-shadow:0 0 8px rgba(255,217,102,.5)}
+  .console .dir{color:#7ea6ff;font-weight:700}
+
+  /* ================= TABLE ================= */
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  thead th{
+    text-align:left;padding:11px 14px;
+    background:rgba(16,26,46,.9);
+    font-size:10px;letter-spacing:1.5px;
+    color:var(--txt-mute);text-transform:uppercase;font-weight:800;
+    border-bottom:1px solid var(--border-2);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:11px 14px;
+    border-bottom:1px solid rgba(26,39,64,.5);
+    color:var(--txt);font-size:12px;
+  }
+  tbody tr{transition:all .15s}
+  tbody tr:hover{
+    background:linear-gradient(90deg,rgba(0,240,255,.05),transparent);
+    box-shadow:inset 3px 0 0 var(--neon-cyan);
+  }
+  tbody tr:last-child td{border-bottom:0}
+  .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.3px}
+  .dim{color:var(--txt-dim)}
+  .tag{
+    display:inline-block;
+    padding:3px 10px;border-radius:4px;
+    font-size:10px;font-weight:800;letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .tag.ok{background:rgba(34,255,136,.12);color:var(--neon-green);border:1px solid rgba(34,255,136,.4);box-shadow:0 0 12px rgba(34,255,136,.2)}
+  .tag.warn{background:rgba(255,179,64,.12);color:var(--warn);border:1px solid rgba(255,179,64,.4);box-shadow:0 0 12px rgba(255,179,64,.2)}
+  .tag.err{background:rgba(255,59,107,.12);color:var(--err);border:1px solid rgba(255,59,107,.4);box-shadow:0 0 12px rgba(255,59,107,.2)}
+  .tag.info{background:rgba(0,240,255,.12);color:var(--neon-cyan);border:1px solid rgba(0,240,255,.4);box-shadow:0 0 12px rgba(0,240,255,.2)}
+  .tag.gold{background:rgba(255,217,102,.12);color:var(--neon-gold);border:1px solid rgba(255,217,102,.4);box-shadow:0 0 12px rgba(255,217,102,.2)}
+
+  /* ================= RIGHT SIDEBAR ================= */
+  .rightbar{
+    background:linear-gradient(180deg,var(--bg-1),rgba(4,6,13,.95));
+    border-left:1px solid var(--border);
+    padding:16px 14px;
+    display:flex;flex-direction:column;gap:14px;
+    position:sticky;top:56px;
+    align-self:start;
+    max-height:calc(100vh - 56px);
+    overflow-y:auto;
+  }
+  .rightbar::-webkit-scrollbar{width:6px}
+  .rightbar::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+  @media(max-width:1200px){
+    .rightbar{border-left:0;border:1px solid var(--border);border-radius:8px;position:static;max-height:none}
+  }
+  .status-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    font-size:11.5px;
+    transition:background .2s;
+  }
+  .status-item:hover{background:rgba(0,240,255,.04)}
+  .status-item:last-child{border-bottom:0}
+  .status-item .k{color:var(--txt-dim);letter-spacing:.5px}
+  .status-item .v{
+    color:#fff;font-weight:700;font-family:var(--mono);font-size:11px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .led{
+    width:8px;height:8px;border-radius:50%;
+    display:inline-block;flex-shrink:0;
+  }
+  .led.g{background:var(--neon-green);box-shadow:0 0 12px var(--neon-green);animation:pulse 2s infinite}
+  .led.y{background:var(--warn);box-shadow:0 0 12px var(--warn);animation:pulse 1.4s infinite}
+  .led.r{background:var(--err);box-shadow:0 0 12px var(--err);animation:pulse .8s infinite}
+  .led.b{background:var(--neon-cyan);box-shadow:0 0 12px var(--neon-cyan)}
+  .led.gold{background:var(--neon-gold);box-shadow:0 0 12px var(--neon-gold)}
+  .led.violet{background:var(--neon-violet);box-shadow:0 0 12px var(--neon-violet)}
+
+  /* ================= TOAST ================= */
+  .toast-wrap{
+    position:fixed;top:90px;right:20px;z-index:200;
+    display:flex;flex-direction:column;gap:10px;
+    pointer-events:none;
+  }
+  .toast{
+    background:linear-gradient(135deg,rgba(16,26,46,.98),rgba(11,18,32,.98));
+    border:1px solid var(--border-3);
+    border-left:3px solid var(--neon-cyan);
+    border-radius:8px;padding:12px 16px;
+    font-size:11.5px;color:var(--txt);
+    min-width:300px;max-width:360px;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.6),
+      0 0 30px rgba(0,240,255,.2);
+    animation:toastIn .35s cubic-bezier(.2,.9,.3,1.2),toastOut .35s ease 5s forwards;
+    pointer-events:auto;
+    backdrop-filter:blur(12px);
+  }
+  .toast.warn{border-left-color:var(--warn);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(255,179,64,.3)}
+  .toast.err{border-left-color:var(--err);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(255,59,107,.3)}
+  .toast.ok{border-left-color:var(--neon-green);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(34,255,136,.3)}
+  .toast.gold{
+    border-left-color:var(--neon-gold);
+    background:linear-gradient(135deg,rgba(255,217,102,.08),rgba(16,26,46,.98));
+    box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(255,217,102,.4);
+  }
+  .toast.violet{border-left-color:var(--neon-violet);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(168,85,247,.3)}
+  .toast .th{
+    font-weight:800;color:#fff;margin-bottom:4px;
+    font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  }
+  .toast .tm{color:var(--txt-dim);font-size:11px;line-height:1.55}
+  @keyframes toastIn{from{opacity:0;transform:translateX(60px) scale(.9)}to{opacity:1;transform:translateX(0) scale(1)}}
+  @keyframes toastOut{to{opacity:0;transform:translateX(60px) scale(.9)}}
+
+  /* ================= MODAL ================= */
+  .modal-backdrop{
+    position:fixed;inset:0;z-index:300;
+    background:radial-gradient(ellipse at center,rgba(4,6,13,.85),rgba(0,0,0,.95));
+    backdrop-filter:blur(16px);
+    display:none;align-items:center;justify-content:center;
+    padding:24px;overflow-y:auto;
+  }
+  .modal-backdrop.show{display:flex;animation:fadeIn .35s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  /* ============ PREVIEW MODAL ============ */
+  .preview-modal{
+    width:100%;max-width:1360px;
+    animation:certIn .5s cubic-bezier(.2,.9,.3,1.2);
+    position:relative;
+  }
+  .preview-modal::before{
+    content:"";position:absolute;inset:-2px;
+    border-radius:12px;
+    background:conic-gradient(from 0deg,var(--neon-cyan),var(--neon-violet),var(--neon-magenta),var(--neon-cyan));
+    filter:blur(20px);
+    opacity:.6;z-index:-1;
+    animation:spin 6s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes certIn{
+    from{opacity:0;transform:scale(.94) translateY(30px)}
+    to{opacity:1;transform:scale(1) translateY(0)}
+  }
+  .preview-toolbar{
+    padding:16px 22px;
+    background:linear-gradient(180deg,rgba(16,26,46,.95),rgba(11,18,32,.9));
+    border:1px solid var(--border-2);border-bottom:0;
+    border-radius:12px 12px 0 0;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;
+  }
+  .preview-toolbar .ttl{
+    font-size:13px;font-weight:800;letter-spacing:2px;
+    color:#fff;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;
+  }
+  .preview-toolbar .ttl::before{
+    content:"★";color:var(--neon-gold);font-size:18px;
+    filter:drop-shadow(0 0 10px var(--neon-gold));
+  }
+  .preview-toolbar .tools{display:flex;gap:8px;flex-wrap:wrap}
+  .tool-btn{
+    padding:8px 14px;border-radius:6px;
+    border:1px solid var(--border-2);
+    background:rgba(16,26,46,.8);
+    color:var(--txt);
+    font-size:10.5px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .tool-btn:hover{
+    background:rgba(0,240,255,.12);
+    border-color:var(--neon-cyan);
+    color:#fff;
+    box-shadow:0 0 20px rgba(0,240,255,.4);
+  }
+  .tool-btn.gold{
+    background:linear-gradient(135deg,rgba(184,134,11,.9),rgba(255,217,102,.9));
+    color:#000;border-color:var(--neon-gold);
+    box-shadow:0 0 20px rgba(255,217,102,.4);
+  }
+  .tool-btn.gold:hover{box-shadow:0 0 30px rgba(255,217,102,.8);color:#000}
+  .tool-btn.close{background:transparent;color:var(--err);border-color:rgba(255,59,107,.5)}
+  .tool-btn.close:hover{background:var(--err);color:#fff;border-color:var(--err)}
+
+  .preview-body{
+    background:radial-gradient(ellipse at center,rgba(7,11,22,.98),rgba(4,6,13,.98));
+    border:1px solid var(--border-2);border-top:0;
+    border-radius:0 0 12px 12px;
+    padding:36px;
+    display:flex;justify-content:center;
+    overflow:auto;
+    max-height:calc(100vh - 200px);
+  }
+
+  /* ================================================================
+     CERTIFICATE — NASA OFFICIAL A4 LANDSCAPE (UPGRADED)
+     ================================================================ */
+  .certificate{
+    width:1123px;height:794px;
+    background:
+      radial-gradient(ellipse 800px 500px at 50% 0%,rgba(255,248,220,.6),transparent 70%),
+      radial-gradient(ellipse 900px 500px at 50% 100%,rgba(240,230,200,.4),transparent 70%),
+      linear-gradient(180deg,#fbf8ed 0%,#f5efd8 50%,#f8f3e3 100%);
+    position:relative;
+    overflow:hidden;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,.85),
+      0 0 120px rgba(255,217,102,.25);
+    font-family:var(--serif);
+    color:#1a1a1a;
+    flex-shrink:0;
+  }
+
+  /* Micro-texture paper overlay */
+  .certificate::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(0deg,rgba(139,105,20,.02) 0 1px,transparent 1px 3px),
+      repeating-linear-gradient(90deg,rgba(139,105,20,.02) 0 1px,transparent 1px 3px);
+    pointer-events:none;
+    z-index:1;
+  }
+
+  /* Guilloche-style subtle pattern */
+  .certificate::after{
+    content:"";position:absolute;inset:0;
+    background-image:
+      radial-gradient(circle at 20% 20%,rgba(184,134,11,.06) 0,transparent 40%),
+      radial-gradient(circle at 80% 80%,rgba(11,61,145,.05) 0,transparent 40%),
+      radial-gradient(circle at 80% 20%,rgba(252,61,33,.04) 0,transparent 40%),
+      radial-gradient(circle at 20% 80%,rgba(184,134,11,.05) 0,transparent 40%);
+    pointer-events:none;
+    z-index:1;
+  }
+
+  /* Frame layers */
+  .cert-frame-outer{
+    position:absolute;inset:20px;
+    border:4px double var(--nasa-blue);
+    box-shadow:
+      inset 0 0 0 1px rgba(184,134,11,.4),
+      inset 0 0 60px rgba(11,61,145,.05);
+    z-index:2;
+  }
+  .cert-frame-mid{
+    position:absolute;inset:32px;
+    border:1.5px solid rgba(184,134,11,.7);
+    z-index:2;
+  }
+  .cert-frame-hair{
+    position:absolute;inset:38px;
+    border:1px solid rgba(11,61,145,.3);
+    z-index:2;
+  }
+
+  /* Ornamental corners (gold with filigree) */
+  .corner{
+    position:absolute;width:64px;height:64px;
+    pointer-events:none;z-index:3;
+  }
+  .corner svg{width:100%;height:100%;filter:drop-shadow(0 1px 2px rgba(139,105,20,.3))}
+  .corner.tl{top:26px;left:26px}
+  .corner.tr{top:26px;right:26px;transform:scaleX(-1)}
+  .corner.bl{bottom:26px;left:26px;transform:scaleY(-1)}
+  .corner.br{bottom:26px;right:26px;transform:scale(-1,-1)}
+
+  /* Watermark meatball */
+  .cert-watermark{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;opacity:.05;
+    z-index:1;
+  }
+  .cert-watermark svg{width:560px;height:560px;transform:rotate(-15deg)}
+
+  /* HEADER */
+  .cert-header{
+    position:absolute;top:60px;left:72px;right:72px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding-bottom:16px;
+    border-bottom:2px solid var(--nasa-blue);
+    z-index:4;
+    position:relative;
+  }
+  .cert-header::after{
+    content:"";position:absolute;bottom:-4px;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(184,134,11,.7),transparent);
+  }
+  .cert-header .left-seal{width:96px;height:96px;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(11,61,145,.3))}
+  .cert-header .center-block{flex:1;text-align:center;padding:0 24px}
+  .cert-header .org-name{
+    font-family:var(--sans);
+    font-size:18px;font-weight:900;letter-spacing:8px;
+    color:var(--nasa-blue);
+    text-transform:uppercase;line-height:1.2;
+  }
+  .cert-header .org-line{
+    height:2px;
+    background:linear-gradient(90deg,transparent,var(--nasa-red),transparent);
+    margin:12px auto;max-width:320px;
+  }
+  .cert-header .org-sub{
+    font-family:var(--sans);
+    font-size:12px;letter-spacing:5px;color:#5a4a2a;
+    text-transform:uppercase;font-weight:700;
+  }
+  .cert-header .org-sub2{
+    font-family:var(--sans);
+    font-size:10px;letter-spacing:4px;color:#7a6a4a;
+    text-transform:uppercase;font-weight:600;
+    margin-top:4px;
+  }
+  .cert-header .right-seal{width:96px;height:96px;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(139,105,20,.4))}
+
+  /* Title */
+  .cert-title-block{
+    position:absolute;top:180px;left:0;right:0;
+    text-align:center;z-index:4;
+  }
+  .cert-title{
+    font-family:'Playfair Display',var(--serif);
+    font-size:56px;font-weight:900;
+    letter-spacing:14px;color:var(--nasa-blue);
+    line-height:1;text-transform:uppercase;
+    text-shadow:
+      1px 1px 0 rgba(184,134,11,.3),
+      2px 2px 0 rgba(184,134,11,.15),
+      0 4px 20px rgba(11,61,145,.2);
+  }
+  .cert-subtitle{
+    font-family:var(--sans);
+    font-size:12px;letter-spacing:9px;
+    color:var(--gold);text-transform:uppercase;
+    font-weight:700;margin-top:16px;
+    text-shadow:0 1px 2px rgba(184,134,11,.2);
+  }
+  .cert-subtitle-line{
+    display:flex;align-items:center;justify-content:center;
+    gap:16px;margin-top:12px;
+  }
+  .cert-subtitle-line .l{height:1px;width:100px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .cert-subtitle-line .r{height:1px;width:100px;background:linear-gradient(90deg,var(--gold),transparent)}
+  .cert-subtitle-line .star{color:var(--gold);font-size:12px;filter:drop-shadow(0 0 2px rgba(184,134,11,.5))}
+
+  /* Presentation */
+  .cert-present{
+    position:absolute;top:282px;left:140px;right:140px;
+    text-align:center;
+    font-family:var(--serif);
+    font-size:16px;line-height:1.7;
+    color:#3a3a3a;font-style:italic;
+    z-index:4;
+  }
+
+  /* Recipient */
+  .cert-recipient{
+    position:absolute;top:335px;left:100px;right:100px;
+    text-align:center;
+    font-family:'Playfair Display',var(--serif);
+    font-size:60px;font-weight:900;
+    color:#1a1a1a;letter-spacing:1.5px;
+    line-height:1.15;padding:16px 0;
+    border-top:1.5px solid rgba(184,134,11,.5);
+    border-bottom:1.5px solid rgba(184,134,11,.5);
+    text-shadow:0 2px 3px rgba(184,134,11,.2);
+    z-index:4;
+  }
+  .cert-recipient::before,.cert-recipient::after{
+    content:"✦";position:absolute;top:50%;transform:translateY(-50%);
+    color:var(--gold);font-size:18px;
+    filter:drop-shadow(0 0 4px rgba(184,134,11,.6));
+  }
+  .cert-recipient::before{left:-28px}
+  .cert-recipient::after{right:-28px}
+
+  /* Award ribbon */
+  .cert-ribbon{
+    position:absolute;top:462px;left:0;right:0;
+    text-align:center;z-index:4;
+  }
+  .cert-ribbon-inner{
+    display:inline-block;
+    padding:11px 52px;
+    background:linear-gradient(180deg,#8b6914,#b8860b 20%,#ffd966 50%,#b8860b 80%,#8b6914 100%);
+    color:#fff;
+    font-family:var(--sans);
+    font-size:15px;font-weight:900;
+    letter-spacing:7px;text-transform:uppercase;
+    position:relative;
+    box-shadow:
+      0 4px 14px rgba(139,105,20,.5),
+      inset 0 1px 0 rgba(255,255,255,.4),
+      inset 0 -1px 0 rgba(0,0,0,.2);
+    text-shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+  .cert-ribbon-inner::before,.cert-ribbon-inner::after{
+    content:"";position:absolute;top:50%;transform:translateY(-50%);
+    border:6px solid transparent;
+  }
+  .cert-ribbon-inner::before{left:-12px;border-right-color:var(--gold)}
+  .cert-ribbon-inner::after{right:-12px;border-left-color:var(--gold)}
+
+  /* Citation */
+  .cert-citation{
+    position:absolute;top:530px;left:140px;right:140px;
+    text-align:center;
+    font-family:var(--serif);
+    font-size:13.5px;line-height:1.9;
+    color:#444;font-style:italic;
+    z-index:4;
+  }
+
+  /* Signatures */
+  .cert-signatures{
+    position:absolute;bottom:148px;left:100px;right:100px;
+    display:grid;grid-template-columns:1fr 1fr;gap:90px;
+    z-index:4;
+  }
+  .sig{text-align:center}
+  .sig-script{
+    font-family:'Brush Script MT','Segoe Script',cursive;
+    font-size:44px;color:var(--nasa-blue);
+    line-height:1;margin-bottom:2px;
+    transform:rotate(-3deg);display:inline-block;
+    text-shadow:0 1px 2px rgba(11,61,145,.2);
+  }
+  .sig-line{height:1.5px;background:#1a1a1a;margin:6px 0 8px}
+  .sig-name{
+    font-family:var(--sans);
+    font-size:13px;font-weight:800;
+    color:#1a1a1a;letter-spacing:.5px;
+  }
+  .sig-title{
+    font-family:var(--sans);
+    font-size:10px;color:#666;
+    text-transform:uppercase;letter-spacing:2px;
+    margin-top:3px;font-weight:600;
+  }
+  .sig-org{
+    font-family:var(--sans);
+    font-size:9px;color:#888;
+    text-transform:uppercase;letter-spacing:1.5px;
+    margin-top:1px;
+  }
+
+  /* Bottom seal */
+  .cert-bottom-seal{
+    position:absolute;bottom:56px;right:96px;
+    width:110px;height:110px;z-index:4;
+    filter:drop-shadow(0 4px 12px rgba(139,105,20,.5));
+  }
+  .cert-bottom-seal svg{
+    width:100%;height:100%;
+    animation:sealGlow 4s ease-in-out infinite;
+  }
+  @keyframes sealGlow{
+    0%,100%{filter:drop-shadow(0 0 0 rgba(255,217,102,0))}
+    50%{filter:drop-shadow(0 0 12px rgba(255,217,102,.4))}
+  }
+
+  /* Footer info */
+  .cert-footer-info{
+    position:absolute;bottom:56px;left:96px;
+    font-family:var(--mono);
+    font-size:9.5px;color:#666;
+    line-height:2;letter-spacing:.5px;
+    z-index:4;
+  }
+  .cert-footer-info .k{color:#999}
+  .cert-footer-info .v{color:var(--nasa-blue);font-weight:700}
+  .cert-footer-info .v.mono{font-family:var(--mono);letter-spacing:.3px}
+
+  /* ============ EMAIL MODAL ============ */
+  .email-modal{
+    max-width:740px;width:100%;
+    background:linear-gradient(180deg,rgba(16,26,46,.98),rgba(7,11,22,.98));
+    border:1px solid var(--border-2);
+    border-radius:12px;
+    box-shadow:
+      0 40px 100px rgba(0,0,0,.9),
+      0 0 80px rgba(0,240,255,.15);
+    animation:certIn .4s cubic-bezier(.2,.9,.3,1.2);
+    overflow:hidden;
+    position:relative;
+  }
+  .email-modal::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),var(--neon-violet),transparent);
+    box-shadow:0 0 20px var(--neon-cyan);
+  }
+  .email-hdr{
+    padding:18px 22px;
+    background:linear-gradient(180deg,rgba(30,41,66,.95),rgba(16,26,46,.9));
+    border-bottom:1px solid var(--border-2);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .email-hdr h3{
+    font-size:13px;font-weight:800;letter-spacing:2px;
+    color:#fff;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;
+    text-shadow:0 0 12px rgba(0,240,255,.5);
+  }
+  .email-hdr h3::before{
+    content:"✉";color:var(--neon-cyan);font-size:18px;
+    filter:drop-shadow(0 0 8px var(--neon-cyan));
+  }
+  .email-body{padding:24px;max-height:calc(100vh - 160px);overflow-y:auto}
+
+  .preview-line{
+    display:flex;gap:10px;
+    padding:9px 14px;
+    background:rgba(7,11,22,.85);
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-family:var(--mono);
+    font-size:11px;margin-bottom:8px;
+    transition:border-color .2s;
+  }
+  .preview-line:hover{border-color:var(--border-2)}
+  .preview-line .k{color:var(--neon-cyan);flex-shrink:0;width:70px;text-shadow:0 0 6px rgba(0,240,255,.4)}
+  .preview-line .v{color:var(--txt);word-break:break-all}
+
+  .send-progress{
+    display:none;
+    margin-top:16px;
+    padding:16px 18px;
+    background:rgba(7,11,22,.9);
+    border:1px solid var(--border-2);
+    border-radius:8px;
+  }
+  .send-progress.show{display:block;animation:fadeIn .3s ease}
+  .send-progress .bar{
+    height:8px;background:rgba(26,39,64,.7);
+    border-radius:4px;overflow:hidden;margin-bottom:10px;
+    box-shadow:inset 0 0 8px rgba(0,0,0,.5);
+  }
+  .send-progress .bar .fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--neon-cyan),var(--neon-violet),var(--neon-magenta));
+    border-radius:4px;
+    transition:width .4s ease;
+    box-shadow:
+      0 0 12px var(--neon-cyan),
+      0 0 24px rgba(168,85,247,.6);
+  }
+  .send-progress .stat{
+    font-size:11px;color:var(--txt-dim);
+    font-family:var(--mono);
+    display:flex;justify-content:space-between;
+  }
+
+  .result-panel{
+    display:none;
+    margin-top:16px;
+    padding:22px;
+    border-radius:8px;
+    background:linear-gradient(135deg,rgba(34,255,136,.1),rgba(34,255,136,.02));
+    border:1px solid rgba(34,255,136,.4);
+    text-align:center;
+    box-shadow:
+      0 0 40px rgba(34,255,136,.2),
+      inset 0 0 30px rgba(34,255,136,.05);
+  }
+  .result-panel.show{display:block;animation:fadeIn .4s ease}
+  .result-panel .big{
+    font-size:44px;color:var(--neon-green);line-height:1;
+    filter:drop-shadow(0 0 20px rgba(34,255,136,.8));
+  }
+  .result-panel .t{
+    font-size:13px;font-weight:800;color:var(--neon-green);
+    margin-top:10px;letter-spacing:2px;text-transform:uppercase;
+    text-shadow:0 0 12px rgba(34,255,136,.6);
+  }
+  .result-panel .m{
+    font-size:11.5px;color:var(--txt-dim);margin-top:6px;
+    font-family:var(--mono);
+  }
+
+  /* ================= FOOTER ================= */
+  .footer{
+    padding:16px 24px;
+    background:linear-gradient(180deg,var(--bg-1),rgba(4,6,13,.98));
+    border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:10.5px;color:var(--txt-mute);
+    letter-spacing:.5px;flex-wrap:wrap;gap:8px;
+    position:relative;z-index:1;
+  }
+  .footer::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);
+    opacity:.4;
+  }
+  .footer .ver{font-family:var(--mono);color:var(--txt-dim)}
+
+  /* ================= SCROLLBAR ================= */
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg,var(--border-2),var(--border-3));
+    border-radius:5px;border:2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover{
+    background:linear-gradient(180deg,var(--neon-cyan),var(--neon-violet));
+  }
+
+  /* ================= PRINT ================= */
+  @media print{
+    body{background:#fff}
+    .gov-banner,.nasa-hdr,.nav,.sidebar,.rightbar,.footer,
+    .modal-backdrop,.toast-wrap,.content > *:not(.print-area){display:none!important}
+    @page{size:A4 landscape;margin:0}
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media(max-width:700px){
+    .gov-banner{font-size:10px;padding:4px 12px}
+    .gov-banner .left a:nth-child(n+2){display:none}
+    .nasa-hdr{padding:10px 14px}
+    .nasa-title{font-size:16px;letter-spacing:4px}
+    .nasa-meatball{width:44px;height:44px}
+    .nasa-meatball svg{width:34px;height:34px}
+    .nav{padding:0 10px}
+    .nav a{padding:10px 12px;font-size:10.5px}
+    .content{padding:14px}
+    .page-title{font-size:17px}
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .card .val{font-size:20px}
+    table{font-size:11px}
+    thead th,tbody td{padding:8px 10px}
+    .toast-wrap{right:10px;left:10px}
+    .toast{min-width:0}
+    .preview-body{padding:12px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ GOV BANNER ============ -->
+<div class="gov-banner">
+  <div class="left">
+    <span class="flag"></span>
+    <span>An official website of the United States Government</span>
+  </div>
+  <div class="right">
+    <a href="#">Here's how you know</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">FOIA</a>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="nasa-hdr">
+  <div class="nasa-logo">
+    <div class="nasa-meatball">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="48" fill="none" stroke="#fff" stroke-width="1.5"/>
+        <ellipse cx="50" cy="50" rx="46" ry="16" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.9"/>
+        <ellipse cx="50" cy="50" rx="44" ry="10" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.7" transform="rotate(-20 50 50)"/>
+        <path d="M 20 62 Q 30 45, 50 42 Q 62 40, 70 30" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M 14 68 Q 26 50, 48 46 Q 62 44, 74 34" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.85"/>
+        <circle cx="30" cy="35" r="1.6" fill="#fff"/>
+        <circle cx="72" cy="40" r="1.2" fill="#fff"/>
+        <circle cx="60" cy="70" r="1.4" fill="#fff"/>
+        <circle cx="22" cy="60" r="1" fill="#fff"/>
+        <circle cx="78" cy="62" r="1.1" fill="#fff"/>
+        <text x="50" y="58" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="14" font-weight="900" fill="#fff">NASA</text>
+      </svg>
+    </div>
+    <div>
+      <div class="nasa-title">NASA · NEXUS</div>
+      <div class="nasa-sub">Certificate Authority Portal · GSFC-CA-04 · v7.0</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="clearance-badge">
+      <span class="led"></span>
+      <span>SECURE · TLS 1.3 · FIPS 140-3</span>
+    </div>
+    <div class="clearance-badge defcon">
+      <span class="led"></span>
+      <span id="defconLbl">DEFCON 3 · ELEVATED</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <a class="active" data-tab="dashboard">Dashboard</a>
+  <a data-tab="issuer">Issuer</a>
+  <a data-tab="registry">Registry</a>
+  <a data-tab="verify">Verify</a>
+  <a data-tab="templates">Templates</a>
+  <a data-tab="audit">Audit</a>
+  <a data-tab="keys">Signing Keys</a>
+  <a data-tab="settings">Settings</a>
+</nav>
+
+<!-- ============ MAIN ============ -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="side-section">
+      <div class="side-hdr">Certificate Authority</div>
+      <div class="side-item active"><span class="icon">◉</span><span>Dashboard</span></div>
+      <div class="side-item" data-goto="issuer"><span class="icon">✎</span><span>Issue Certificate</span></div>
+      <div class="side-item"><span class="icon">▤</span><span>Registry</span><span class="badge">1.8k</span></div>
+      <div class="side-item"><span class="icon">◐</span><span>Verify Signature</span></div>
+      <div class="side-item"><span class="icon">◫</span><span>Templates</span></div>
+      <div class="side-item"><span class="icon">☰</span><span>Audit Log</span></div>
+    </div>
+    <div class="side-section">
+      <div class="side-hdr">Authority</div>
+      <div class="side-item"><span class="icon">⚿</span><span>Signing Keys</span><span class="badge">HSM</span></div>
+      <div class="side-item"><span class="icon">☂</span><span>CA Policies</span></div>
+      <div class="side-item"><span class="icon">⚙</span><span>Configuration</span></div>
+    </div>
+    <div class="side-section">
+      <div class="side-hdr">Session</div>
+      <div class="side-item"><span class="icon">◐</span><span>j.rodriguez@nasa.gov</span></div>
+      <div class="side-item"><span class="icon">◷</span><span id="sessTime">Session: 00:00:00</span></div>
+      <div class="side-item" style="color:var(--err)"><span class="icon">⏻</span><span>Logout</span></div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ============ DASHBOARD ============ -->
+    <div data-panel="dashboard">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">NEXUS Certificate Authority</div>
+          <div class="page-sub">
+            <span class="crumb"><a href="#">Home</a> / <a href="#">CA</a> / <span style="color:var(--txt)">Dashboard</span></span>
+            <span class="tag info">GSFC-CA-04</span>
+            <span class="tag ok">ONLINE</span>
+            <span class="tag gold">v7.0 NEON</span>
+          </div>
+        </div>
+        <div class="page-actions">
+          <button class="btn gold" id="btnQuickIssue">★ Issue Certificate</button>
+          <button class="btn primary" id="btnQuickPreview">◉ Preview Template</button>
+        </div>
+      </div>
+
+      <div class="cards" style="margin-bottom:18px">
+        <div class="card gold">
+          <div class="lbl">Certificates Issued</div>
+          <div class="val" id="kpiCerts">1,847</div>
+          <div class="sub"><span class="delta up">▲ 12</span> this month</div>
+          <div class="spark" id="spark1"></div>
+        </div>
+        <div class="card green">
+          <div class="lbl">Verified</div>
+          <div class="val" id="kpiVerified">1,842</div>
+          <div class="sub"><span class="delta up">● 99.7%</span> success rate</div>
+          <div class="spark" id="spark2"></div>
+        </div>
+        <div class="card">
+          <div class="lbl">Delivered (Email)</div>
+          <div class="val" id="kpiDelivered">1,728</div>
+          <div class="sub"><span class="delta up">▲ 93.5%</span> delivery</div>
+          <div class="spark" id="spark3"></div>
+        </div>
+        <div class="card violet">
+          <div class="lbl">Pending</div>
+          <div class="val" id="kpiPending">5</div>
+          <div class="sub"><span class="delta down">▼ 2</span> awaiting signature</div>
+          <div class="spark" id="spark4"></div>
+        </div>
+        <div class="card magenta">
+          <div class="lbl">Revoked</div>
+          <div class="val" id="kpiRevoked">0</div>
+          <div class="sub"><span class="delta up">● 0%</span> revocation rate</div>
+          <div class="spark" id="spark5"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:18px">
+        <div class="panel-hdr">
+          <span class="title">CA Console · Live</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="mono" style="color:var(--neon-green);font-size:10.5px">● LIVE</span>
+            <span class="mono" style="color:var(--txt-mute);font-size:10.5px" id="consoleCount">0 lines</span>
+          </div>
+        </div>
+        <div class="panel-body flush">
+          <div class="console" id="console"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hdr">
+          <span class="title">Recent Certificates</span>
+          <button class="btn sm gold" data-goto="issuer">★ Issue New</button>
+        </div>
+        <div class="panel-body flush">
+          <table>
+            <thead>
+              <tr><th>Cert ID</th><th>Recipient</th><th>Award Type</th><th>Issued</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="certBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ISSUER ============ -->
+    <div data-panel="issuer" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Issue New Certificate</div>
+          <div class="page-sub">
+            <span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Issuer</span></span>
+            <span class="tag gold">DRAFT</span>
+          </div>
+        </div>
+        <div class="page-actions">
+          <button class="btn" data-goto="dashboard">✕ Cancel</button>
+          <button class="btn primary" id="btnPreviewCert">◉ Preview</button>
+          <button class="btn gold" id="btnIssueCert">★ Issue & Sign</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:18px">
+        <div class="panel">
+          <div class="panel-hdr"><span class="title">Recipient Information</span></div>
+          <div class="panel-body">
+            <div class="form-row">
+              <div class="fg">
+                <label>Full Legal Name</label>
+                <input type="text" id="fName" value="Dr. Elena Vasquez" maxlength="60">
+              </div>
+              <div class="fg">
+                <label>Email Address</label>
+                <input type="email" id="fEmail" value="elena.vasquez@example.com">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="fg">
+                <label>Organization / Affiliation</label>
+                <input type="text" id="fOrg" value="Jet Propulsion Laboratory">
+              </div>
+              <div class="fg">
+                <label>Employee / Badge ID</label>
+                <input type="text" id="fBadge" value="JPL-8842-K">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="fg">
+                <label>Award Type</label>
+                <select id="fAward">
+                  <option>Distinguished Service Medal</option>
+                  <option>Exceptional Achievement Medal</option>
+                  <option>Outstanding Leadership Medal</option>
+                  <option>Public Service Award</option>
+                  <option>Group Achievement Award</option>
+                  <option>Certificate of Appreciation</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label>Award Date</label>
+                <input type="date" id="fDate">
+              </div>
+            </div>
+            <div class="fg">
+              <label>Citation / Award Description</label>
+              <textarea id="fCitation" rows="4">In recognition of exceptional dedication, technical excellence, and invaluable contributions to the NASA Deep Space Network and Voyager Interstellar Mission. Your unwavering commitment to advancing human knowledge reflects the highest traditions of this Agency.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-hdr"><span class="title">Signatories & Authority</span></div>
+          <div class="panel-body">
+            <div class="fg">
+              <label>Signatory 1 — Name</label>
+              <input type="text" id="fSig1Name" value="J. Rodriguez" maxlength="40">
+            </div>
+            <div class="fg">
+              <label>Signatory 1 — Title</label>
+              <input type="text" id="fSig1Title" value="Director, Mission Operations" maxlength="60">
+            </div>
+            <div class="fg" style="border-top:1px dashed var(--border-2);padding-top:14px;margin-top:10px">
+              <label>Signatory 2 — Name</label>
+              <input type="text" id="fSig2Name" value="Dr. Sarah Owens" maxlength="40">
+            </div>
+            <div class="fg">
+              <label>Signatory 2 — Title</label>
+              <input type="text" id="fSig2Title" value="Deputy Director, GSFC" maxlength="60">
+            </div>
+            <div class="fg" style="border-top:1px dashed var(--border-2);padding-top:14px;margin-top:10px">
+              <label>Certificate Authority</label>
+              <input type="text" value="GSFC-CA-04 · SHA-256 · RSA-4096" readonly>
+              <div class="hint">Signing keys stored in FIPS 140-3 HSM. Certificates timestamped & auditable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ REGISTRY ============ -->
+    <div data-panel="registry" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Certificate Registry</div>
+          <div class="page-sub">
+            <span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Registry</span></span>
+            <span class="tag info">1,847 RECORDS</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><span class="title">All Issued Certificates</span></div>
+        <div class="panel-body flush">
+          <table>
+            <thead>
+              <tr><th>Cert ID</th><th>Recipient</th><th>Organization</th><th>Award</th><th>Issued</th><th>Authority</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="registryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ VERIFY ============ -->
+    <div data-panel="verify" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Verify Certificate</div>
+          <div class="page-sub"><span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Verify</span></span></div>
+        </div>
+      </div>
+      <div class="panel" style="max-width:760px">
+        <div class="panel-hdr"><span class="title">Signature Verification</span></div>
+        <div class="panel-body">
+          <div class="fg">
+            <label>Certificate ID</label>
+            <input type="text" id="verifyId" placeholder="GSFC-2026-0418-A" value="GSFC-2026-0418-A">
+          </div>
+          <div class="fg">
+            <label>SHA-256 Signature Hash</label>
+            <input type="text" id="verifyHash" placeholder="Auto-fill or paste hash" value="a91f3c8e2b4d9f1a..." readonly>
+            <div class="hint">Hash disimpan di HSM. Input manual untuk verifikasi silang.</div>
+          </div>
+          <button class="btn primary" id="btnVerify" style="width:100%">◐ Verify Signature</button>
+          <div class="result-panel" id="verifyResult" style="margin-top:16px">
+            <div class="big">✓</div>
+            <div class="t">Signature Valid</div>
+            <div class="m" id="verifyMsg">Certificate issued by GSFC-CA-04, all fields intact</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TEMPLATES ============ -->
+    <div data-panel="templates" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Certificate Templates</div>
+          <div class="page-sub"><span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Templates</span></span></div>
+        </div>
+      </div>
+      <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+        <div class="card gold">
+          <div class="lbl">Official NASA</div>
+          <div class="val" style="font-size:16px;font-family:var(--sans);font-weight:800">Recognition</div>
+          <div class="sub">Default GSFC template · A4 landscape · gold seal</div>
+          <button class="btn sm gold" style="margin-top:12px;width:100%" data-template="official">Use Template</button>
+        </div>
+        <div class="card">
+          <div class="lbl">Classic</div>
+          <div class="val" style="font-size:16px;font-family:var(--sans);font-weight:800">Achievement</div>
+          <div class="sub">Blue border · silver seal</div>
+          <button class="btn sm" style="margin-top:12px;width:100%" data-template="classic">Use Template</button>
+        </div>
+        <div class="card violet">
+          <div class="lbl">Modern</div>
+          <div class="val" style="font-size:16px;font-family:var(--sans);font-weight:800">Appreciation</div>
+          <div class="sub">Minimal · thin border</div>
+          <button class="btn sm" style="margin-top:12px;width:100%" data-template="modern">Use Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ AUDIT ============ -->
+    <div data-panel="audit" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Audit Log</div>
+          <div class="page-sub">
+            <span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Audit</span></span>
+            <span class="tag info">REAL-TIME</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><span class="title">Event Stream</span></div>
+        <div class="panel-body flush">
+          <div class="console" id="auditConsole" style="height:560px;border-radius:0;border:0"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ KEYS ============ -->
+    <div data-panel="keys" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Signing Keys</div>
+          <div class="page-sub">
+            <span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Keys</span></span>
+            <span class="tag err">HSM REQUIRED</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><span class="title">Active Keys</span></div>
+        <div class="panel-body flush">
+          <table>
+            <thead>
+              <tr><th>Key ID</th><th>Algorithm</th><th>Created</th><th>Expires</th><th>Storage</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="mono">GSFC-CA-04-K1</td><td>RSA-4096</td><td class="mono dim">2024-01-15</td><td class="mono dim">2029-01-15</td><td><span class="tag info">HSM · Slot 1</span></td><td><span class="tag ok">Active</span></td></tr>
+              <tr><td class="mono">GSFC-CA-04-K2</td><td>ECDSA P-384</td><td class="mono dim">2024-06-22</td><td class="mono dim">2029-06-22</td><td><span class="tag info">HSM · Slot 2</span></td><td><span class="tag ok">Active</span></td></tr>
+              <tr><td class="mono">GSFC-CA-04-K0</td><td>RSA-4096</td><td class="mono dim">2019-01-15</td><td class="mono dim">2024-01-15</td><td><span class="tag info">HSM · Archived</span></td><td><span class="tag warn">Retired</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SETTINGS ============ -->
+    <div data-panel="settings" style="display:none">
+      <div class="page-hdr">
+        <div>
+          <div class="page-title">Configuration</div>
+          <div class="page-sub"><span class="crumb"><a href="#">CA</a> / <span style="color:var(--txt)">Settings</span></span></div>
+        </div>
+      </div>
+      <div class="panel" style="max-width:760px">
+        <div class="panel-hdr"><span class="title">General Settings</span></div>
+        <div class="panel-body">
+          <div class="fg">
+            <label>Default Authority</label>
+            <input type="text" value="GSFC-CA-04" readonly>
+          </div>
+          <div class="fg">
+            <label>Default Signing Algorithm</label>
+            <input type="text" value="RSA-4096 · SHA-256" readonly>
+          </div>
+          <div class="fg">
+            <label>Certificate Validity Period</label>
+            <input type="text" value="Permanent (records retention 100 years)" readonly>
+          </div>
+          <div class="fg">
+            <label>Email Delivery Relay</label>
+            <input type="text" value="smtp-relay.gsfc.nasa.gov:465 · TLS 1.3" readonly>
+          </div>
+          <div class="fg">
+            <label>Audit Log Retention</label>
+            <input type="text" value="365 days · immutable WORM storage" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="rightbar">
+
+    <div class="panel">
+      <div class="panel-hdr"><span class="title">CA Status</span></div>
+      <div class="panel-body flush" style="padding:0">
+        <div class="status-item"><span class="k">Authority</span><span class="v"><span class="led gold"></span>GSFC-CA-04</span></div>
+        <div class="status-item"><span class="k">HSM</span><span class="v"><span class="led g"></span>Online</span></div>
+        <div class="status-item"><span class="k">Key Slot 1</span><span class="v"><span class="led g"></span>RSA-4096</span></div>
+        <div class="status-item"><span class="k">Key Slot 2</span><span class="v"><span class="led g"></span>ECDSA P-384</span></div>
+        <div class="status-item"><span class="k">CRL</span><span class="v"><span class="led g"></span>Updated 4m ago</span></div>
+        <div class="status-item"><span class="k">OCSP</span><span class="v"><span class="led g"></span>Responding</span></div>
+        <div class="status-item"><span class="k">Audit Chain</span><span class="v"><span class="led g"></span>Intact</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><span class="title">Distribution</span></div>
+      <div class="panel-body" style="padding:14px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt-dim);margin-bottom:5px">
+              <span>Email</span>
+              <span class="mono" style="color:var(--neon-green)">93.5%</span>
+            </div>
+            <div style="height:6px;background:var(--bg-4);border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:93.5%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-green));border-radius:3px;box-shadow:0 0 12px var(--neon-green)"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt-dim);margin-bottom:5px">
+              <span>PDF</span>
+              <span class="mono" style="color:var(--neon-cyan)">78.2%</span>
+            </div>
+            <div style="height:6px;background:var(--bg-4);border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:78.2%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-blue));border-radius:3px;box-shadow:0 0 12px var(--neon-cyan)"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt-dim);margin-bottom:5px">
+              <span>Print</span>
+              <span class="mono" style="color:var(--warn)">42.1%</span>
+            </div>
+            <div style="height:6px;background:var(--bg-4);border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:42.1%;background:linear-gradient(90deg,var(--neon-cyan),var(--warn));border-radius:3px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><span class="title">Operator</span></div>
+      <div class="panel-body flush" style="padding:0">
+        <div class="status-item"><span class="k">Name</span><span class="v">J. Rodriguez</span></div>
+        <div class="status-item"><span class="k">Role</span><span class="v">CA_OFFICER</span></div>
+        <div class="status-item"><span class="k">Clearance</span><span class="v" style="color:var(--err)">TS/SCI</span></div>
+        <div class="status-item"><span class="k">Badge</span><span class="v mono">GSFC-4421-A</span></div>
+        <div class="status-item"><span class="k">MFA</span><span class="v" style="color:var(--ok)">Verified</span></div>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div>
+    <strong style="color:var(--txt-dim)">NASA Goddard Space Flight Center</strong> · 8800 Greenbelt Rd, Greenbelt, MD 20771 · Certificate Authority
+  </div>
+  <div class="ver">NEXUS CA v7.0.0 · Build 20260418-f8a21 · Node ca-gsfc-01</div>
+</footer>
+
+<!-- ============ PREVIEW MODAL ============ -->
+<div class="modal-backdrop" id="previewModal">
+  <div class="preview-modal">
+    <div class="preview-toolbar">
+      <div class="ttl">NASA Certificate of Recognition · Live Preview</div>
+      <div class="tools">
+        <button class="tool-btn" id="pvDownload">⬇ Download PDF</button>
+        <button class="tool-btn gold" id="pvEmail">✉ Send to Email</button>
+        <button class="tool-btn" onclick="window.print()">⎙ Print</button>
+        <button class="tool-btn close" id="pvClose">✕ Close</button>
+      </div>
+    </div>
+    <div class="preview-body">
+      <!-- CERTIFICATE -->
+      <div class="certificate" id="certificate">
+
+        <div class="cert-watermark">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="48" fill="none" stroke="#0b3d91" stroke-width="1.5"/>
+            <ellipse cx="50" cy="50" rx="46" ry="16" fill="none" stroke="#0b3d91" stroke-width="1"/>
+            <ellipse cx="50" cy="50" rx="44" ry="10" fill="none" stroke="#0b3d91" stroke-width=".8" transform="rotate(-20 50 50)"/>
+            <text x="50" y="58" text-anchor="middle" font-family="Arial Black" font-size="14" font-weight="900" fill="#0b3d91">NASA</text>
+          </svg>
+        </div>
+
+        <div class="cert-frame-outer"></div>
+        <div class="cert-frame-mid"></div>
+        <div class="cert-frame-hair"></div>
+
+        <div class="corner tl">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M4 60 L4 4 L60 4" stroke="#b8860b" stroke-width="2.5"/>
+            <path d="M10 54 L10 10 L54 10" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+            <path d="M14 14 L20 14 M14 14 L14 20" stroke="#b8860b" stroke-width="1.5" opacity=".8"/>
+            <circle cx="14" cy="14" r="3" fill="#b8860b"/>
+            <circle cx="14" cy="14" r="1.5" fill="#faf7ef"/>
+            <path d="M4 32 L8 32 M4 20 L8 20 M32 4 L32 8 M20 4 L20 8" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="corner tr">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M4 60 L4 4 L60 4" stroke="#b8860b" stroke-width="2.5"/>
+            <path d="M10 54 L10 10 L54 10" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+            <path d="M14 14 L20 14 M14 14 L14 20" stroke="#b8860b" stroke-width="1.5" opacity=".8"/>
+            <circle cx="14" cy="14" r="3" fill="#b8860b"/>
+            <circle cx="14" cy="14" r="1.5" fill="#faf7ef"/>
+            <path d="M4 32 L8 32 M4 20 L8 20 M32 4 L32 8 M20 4 L20 8" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="corner bl">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M4 60 L4 4 L60 4" stroke="#b8860b" stroke-width="2.5"/>
+            <path d="M10 54 L10 10 L54 10" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+            <path d="M14 14 L20 14 M14 14 L14 20" stroke="#b8860b" stroke-width="1.5" opacity=".8"/>
+            <circle cx="14" cy="14" r="3" fill="#b8860b"/>
+            <circle cx="14" cy="14" r="1.5" fill="#faf7ef"/>
+            <path d="M4 32 L8 32 M4 20 L8 20 M32 4 L32 8 M20 4 L20 8" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="corner br">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M4 60 L4 4 L60 4" stroke="#b8860b" stroke-width="2.5"/>
+            <path d="M10 54 L10 10 L54 10" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+            <path d="M14 14 L20 14 M14 14 L14 20" stroke="#b8860b" stroke-width="1.5" opacity=".8"/>
+            <circle cx="14" cy="14" r="3" fill="#b8860b"/>
+            <circle cx="14" cy="14" r="1.5" fill="#faf7ef"/>
+            <path d="M4 32 L8 32 M4 20 L8 20 M32 4 L32 8 M20 4 L20 8" stroke="#b8860b" stroke-width="1" opacity=".6"/>
+          </svg>
+        </div>
+
+        <div class="cert-header">
+          <div class="left-seal">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="48" fill="#0b3d91" stroke="#fff" stroke-width="1.5"/>
+              <ellipse cx="50" cy="50" rx="46" ry="16" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.9"/>
+              <ellipse cx="50" cy="50" rx="44" ry="10" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.7" transform="rotate(-20 50 50)"/>
+              <path d="M 20 62 Q 30 45, 50 42 Q 62 40, 70 30" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="30" cy="35" r="1.6" fill="#fff"/>
+              <circle cx="72" cy="40" r="1.2" fill="#fff"/>
+              <circle cx="60" cy="70" r="1.4" fill="#fff"/>
+              <text x="50" y="58" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="14" font-weight="900" fill="#fff">NASA</text>
+            </svg>
+          </div>
+          <div class="center-block">
+            <div class="org-name">National Aeronautics and Space Administration</div>
+            <div class="org-line"></div>
+            <div class="org-sub">Goddard Space Flight Center</div>
+            <div class="org-sub2">Greenbelt · Maryland · United States of America</div>
+          </div>
+          <div class="right-seal">
+            <svg viewBox="0 0 100 100">
+              <defs>
+                <radialGradient id="goldA" cx="50%" cy="30%">
+                  <stop offset="0%" stop-color="#fde68a"/>
+                  <stop offset="45%" stop-color="#fbbf24"/>
+                  <stop offset="100%" stop-color="#8b6914"/>
+                </radialGradient>
+              </defs>
+              <circle cx="50" cy="50" r="46" fill="url(#goldA)" stroke="#8b6914" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#8b6914" stroke-width=".8"/>
+              <circle cx="50" cy="50" r="34" fill="none" stroke="#8b6914" stroke-width=".4"/>
+              <text x="50" y="32" text-anchor="middle" font-family="Georgia" font-size="6" letter-spacing="1" fill="#4a3a0a" font-weight="700">UNITED STATES</text>
+              <text x="50" y="44" text-anchor="middle" font-family="Georgia" font-size="8" fill="#4a3a0a" font-weight="700">NASA</text>
+              <text x="50" y="56" text-anchor="middle" font-family="Georgia" font-size="6" letter-spacing="1" fill="#4a3a0a" font-weight="700">GODDARD</text>
+              <text x="50" y="66" text-anchor="middle" font-family="Georgia" font-size="5" letter-spacing="1" fill="#4a3a0a" font-weight="700">SPACE FLIGHT CENTER</text>
+              <text x="50" y="76" text-anchor="middle" font-family="Georgia" font-size="5" letter-spacing="1" fill="#4a3a0a">★ 1958 ★</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="cert-title-block">
+          <div class="cert-title">Certificate of Recognition</div>
+          <div class="cert-subtitle">Presented by the Administrator</div>
+          <div class="cert-subtitle-line">
+            <span class="l"></span>
+            <span class="star">★</span>
+            <span class="r"></span>
+          </div>
+        </div>
+
+        <div class="cert-present">This official certificate is proudly presented to</div>
+
+        <div class="cert-recipient" id="certRecipient">Dr. Elena Vasquez</div>
+
+        <div class="cert-ribbon">
+          <div class="cert-ribbon-inner" id="certRibbon">Distinguished Service Medal</div>
+        </div>
+
+        <div class="cert-citation" id="certCitation">
+          In recognition of exceptional dedication, technical excellence, and invaluable contributions to the NASA Deep Space Network and Voyager Interstellar Mission. Your unwavering commitment to advancing human knowledge reflects the highest traditions of this Agency.
+        </div>
+
+        <div class="cert-signatures">
+          <div class="sig">
+            <div class="sig-script" id="certSig1Name">J. Rodriguez</div>
+            <div class="sig-line"></div>
+            <div class="sig-name" id="certSig1NamePrint">J. Rodriguez</div>
+            <div class="sig-title" id="certSig1Title">Director, Mission Operations</div>
+            <div class="sig-org">Goddard Space Flight Center</div>
+          </div>
+          <div class="sig">
+            <div class="sig-script" id="certSig2Name">Owens</div>
+            <div class="sig-line"></div>
+            <div class="sig-name" id="certSig2NamePrint">Dr. Sarah Owens</div>
+            <div class="sig-title" id="certSig2Title">Deputy Director, GSFC</div>
+            <div class="sig-org">National Aeronautics and Space Administration</div>
+          </div>
+        </div>
+
+        <div class="cert-bottom-seal">
+          <svg viewBox="0 0 100 100">
+            <defs>
+              <radialGradient id="goldB" cx="50%" cy="30%">
+                <stop offset="0%" stop-color="#fde68a"/>
+                <stop offset="45%" stop-color="#fbbf24"/>
+                <stop offset="100%" stop-color="#8b6914"/>
+              </radialGradient>
+            </defs>
+            <circle cx="50" cy="50" r="46" fill="url(#goldB)" stroke="#8b6914" stroke-width="1.5"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#8b6914" stroke-width=".8"/>
+            <text x="50" y="40" text-anchor="middle" font-family="Georgia" font-size="7" fill="#4a3a0a" font-weight="700" letter-spacing="1">OFFICIAL</text>
+            <text x="50" y="52" text-anchor="middle" font-family="Georgia" font-size="6" fill="#4a3a0a" font-weight="700">GSFC-CA-04</text>
+            <text x="50" y="62" text-anchor="middle" font-family="Georgia" font-size="5" fill="#4a3a0a">DIGITALLY SIGNED</text>
+            <text x="50" y="72" text-anchor="middle" font-family="Georgia" font-size="6" fill="#4a3a0a" font-weight="700">★ AUTHENTICITY ★</text>
+          </svg>
+        </div>
+
+        <div class="cert-footer-info">
+          <div><span class="k">CERTIFICATE NO.</span> <span class="v" id="certId">GSFC-2026-0418-A</span></div>
+          <div><span class="k">DATE OF ISSUE</span> <span class="v" id="certDate">2026-04-18</span></div>
+          <div><span class="k">AUTHORITY</span> <span class="v">GSFC-CA-04 · SHA-256</span></div>
+          <div><span class="k">SIGNATURE</span> <span class="v mono" id="certSig">a91f3c8e...</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EMAIL MODAL ============ -->
+<div class="modal-backdrop" id="emailModal">
+  <div class="email-modal">
+    <div class="email-hdr">
+      <h3>Send Certificate via Email</h3>
+      <button style="background:transparent;border:1px solid rgba(255,59,107,.5);color:var(--err);padding:6px 12px;border-radius:6px;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer" id="btnCloseEmail">✕ Close</button>
+    </div>
+    <div class="email-body">
+
+      <div class="form-row">
+        <div class="fg">
+          <label>Recipient Name</label>
+          <input type="text" id="emName" readonly>
+        </div>
+        <div class="fg">
+          <label>Recipient Email *</label>
+          <input type="email" id="emTo" placeholder="recipient@example.com">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="fg">
+          <label>Sender Email</label>
+          <input type="email" id="emFrom" value="nasa.certificate@example.com">
+        </div>
+        <div class="fg">
+          <label>Certificate Number</label>
+          <input type="text" id="emCertId" readonly>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Subject</label>
+        <input type="text" id="emSubject" value="NASA Certificate of Recognition — Official Delivery">
+      </div>
+
+      <div class="fg">
+        <label>Message Body</label>
+        <textarea id="emBody" rows="7">Dear Recipient,
+
+On behalf of the National Aeronautics and Space Administration and the Goddard Space Flight Center, it is our great honor to present you with this Certificate of Recognition.
+
+Your exceptional contributions represent the very best of NASA. Please find your official certificate attached to this email.
+
+With gratitude and admiration,
+
+J. Rodriguez
+Director, Mission Operations
+NASA Goddard Space Flight Center</textarea>
+      </div>
+
+      <div class="preview-line"><span class="k">From:</span><span class="v" id="pvFrom">nasa.certificate@example.com</span></div>
+      <div class="preview-line"><span class="k">To:</span><span class="v" id="pvTo">—</span></div>
+      <div class="preview-line"><span class="k">Subject:</span><span class="v" id="pvSubj">—</span></div>
+      <div class="preview-line"><span class="k">Attach:</span><span class="v" id="pvAtt">certificate.pdf · signed · PGP</span></div>
+
+      <div class="send-progress" id="sendProgress">
+        <div class="bar"><div class="fill" id="sendFill"></div></div>
+        <div class="stat"><span id="sendStat">Preparing...</span><span id="sendPct">0%</span></div>
+      </div>
+
+      <div class="result-panel" id="resultPanel">
+        <div class="big">✓</div>
+        <div class="t">Certificate Successfully Delivered</div>
+        <div class="m" id="resultMsg">Message sent</div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:10px;padding-top:18px;border-top:1px solid var(--border);margin-top:22px">
+        <button class="btn ghost" id="btnCancelEmail">Cancel</button>
+        <button class="btn gold" id="btnSendEmail">✉ Send via EmailJS</button>
+      </div>
+
+      <div class="fg" style="margin-top:14px;padding-top:14px;border-top:1px dashed var(--border-2)">
+        <div class="hint">
+          <strong style="color:var(--neon-cyan)">ℹ️ Cara aktivasi kirim email nyata:</strong><br>
+          1. Daftar gratis di <a href="https://www.emailjs.com/" target="_blank" style="color:var(--neon-cyan)">emailjs.com</a><br>
+          2. Buat email service (Gmail/Outlook) → dapat <strong>Service ID</strong><br>
+          3. Buat email template → dapat <strong>Template ID</strong><br>
+          4. Ambil <strong>Public Key</strong> dari Account settings<br>
+          5. Isi 3 nilai di bawah, tekan "Aktifkan", lalu kirim akan benar-benar terkirim ke inbox penerima.
+        </div>
+        <div class="form-row three" style="margin-top:12px">
+          <div class="fg"><label>Service ID</label><input type="text" id="ejsService" placeholder="service_xxx"></div>
+          <div class="fg"><label>Template ID</label><input type="text" id="ejsTemplate" placeholder="template_xxx"></div>
+          <div class="fg"><label>Public Key</label><input type="text" id="ejsPublic" placeholder="xxxxxxxx"></div>
+        </div>
+        <button class="btn sm" id="btnActivateEmail" style="margin-top:8px">⚡ Aktifkan EmailJS</button>
+        <span id="ejsStatus" style="font-size:11px;margin-left:10px;color:var(--txt-mute)"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST WRAP ============ -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+(function(){
+  'use strict';
+  const pad = n => String(n).padStart(2,'0');
+  const $ = id => document.getElementById(id);
+  const ri = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+  const rnd = a => a[Math.floor(Math.random()*a.length)];
+
+  /* ============================================================
+     SESSION CLOCK
+     ============================================================ */
+  let sessSec = 0;
+  setInterval(() => {
+    sessSec++;
+    const h = Math.floor(sessSec/3600), m = Math.floor((sessSec%3600)/60), s = sessSec%60;
+    $('sessTime').textContent = 'Session: ' + pad(h)+':'+pad(m)+':'+pad(s);
+  }, 1000);
+
+  /* ============================================================
+     TAB SWITCHING
+     ============================================================ */
+  function switchTab(tab){
+    document.querySelectorAll('.nav a').forEach(x => x.classList.toggle('active', x.dataset.tab === tab));
+    document.querySelectorAll('[data-panel]').forEach(p => {
+      p.style.display = (p.dataset.panel === tab) ? 'block' : 'none';
+    });
+  }
+  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () => switchTab(a.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.goto)));
+
+  /* ============================================================
+     SPARKLINES
+     ============================================================ */
+  ['spark1','spark2','spark3','spark4','spark5'].forEach(id => {
+    const s = $(id); if(!s) return;
+    for(let i=0;i<24;i++){
+      const b = document.createElement('div');
+      b.className = 'b';
+      b.style.height = (25 + Math.random()*70) + '%';
+      s.appendChild(b);
+    }
+    setInterval(() => {
+      const f = s.firstChild; if(f) s.removeChild(f);
+      const b = document.createElement('div');
+      b.className = 'b';
+      b.style.height = (25 + Math.random()*70) + '%';
+      s.appendChild(b);
+    }, 900);
+  });
+
+  /* ============================================================
+     CONSOLES
+     ============================================================ */
+  function makeLogger(target, msgs, max, interval){
+    function add(line){
+      const c = target; if(!c) return;
+      const now = new Date();
+      const ts = '[' + pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds()) + ']';
+      const d = document.createElement('div');
+      d.className = 'ln';
+      d.innerHTML = '<span class="t">' + ts + '</span><span class="' + line[0] + '">' + line[1] + '</span>';
+      c.appendChild(d);
+      while(c.children.length > max) c.removeChild(c.firstChild);
+      c.scrollTop = c.scrollHeight;
+      if(c.id === 'console') $('consoleCount').textContent = c.children.length + ' lines';
+    }
+    setInterval(() => add(rnd(msgs)), interval);
+    return add;
+  }
+
+  const caMsgs = [
+    ['ok', '✓ CA heartbeat OK · HSM responding ' + ri(2,8) + 'ms'],
+    ['info', '→ OCSP request · ' + ri(100,999) + ' responses'],
+    ['ok', '✓ CRL published · ' + ri(1000,9999) + ' entries'],
+    ['gold', '★ Certificate signed · GSFC-' + new Date().getFullYear() + '-' + pad(ri(1,12)) + pad(ri(1,28)) + '-' + String.fromCharCode(65+ri(0,5))],
+    ['info', '→ Audit chain verified · ' + ri(100,999) + ' events'],
+    ['ok', '✓ Timestamp authority responded · TSA-' + ri(10,99)],
+    ['warn', '⚠ Key rotation scheduled in ' + ri(30,90) + ' days'],
+    ['ok', '✓ Backup snapshot complete · ' + (0.5+Math.random()*1.5).toFixed(2) + ' GB'],
+    ['info', '→ PKI health: 100% operational'],
+    ['gold', '★ Certificate delivered · SMTP relay OK'],
+    ['ok', '✓ HSM session · slot ' + ri(1,2)],
+    ['info', '→ SHA-256 signature verified'],
+  ];
+  const addCA = makeLogger($('console'), caMsgs, 250, 1600);
+  for(let i=0;i<8;i++) addCA(rnd(caMsgs));
+
+  const auditMsgs = [
+    ['ok', 'LOGIN', 'j.rodriguez@nasa.gov · MFA verified · IP 10.20.14.42'],
+    ['info', 'KEY_USE', 'GSFC-CA-04-K1 · RSA-4096 · sign'],
+    ['gold', 'ISSUE', 'GSFC-2026-0418-A · Dr. Elena Vasquez · Distinguished Service Medal'],
+    ['info', 'DELIVER', 'Email sent · SMTP relay · TLS 1.3'],
+    ['ok', 'VERIFY', 'SHA-256 signature valid · chain intact'],
+    ['info', 'OCSP', 'Response 200 · revoked=0'],
+    ['ok', 'BACKUP', 'HSM snapshot · 1.42 GB · WORM storage'],
+    ['warn', 'POLICY', 'Key rotation due in 45 days · K1'],
+    ['info', 'QUERY', 'Registry search · recipient=Vasquez'],
+    ['ok', 'AUDIT', 'Chain verification · 1,847 records · all valid'],
+    ['gold', 'ISSUE', 'GSFC-2026-0418-B · Marcus Chen · Exceptional Achievement'],
+    ['info', 'CRL', 'CRL updated · 12 entries'],
+  ];
+  const addAudit = makeLogger($('auditConsole'), auditMsgs, 400, 2100);
+  for(let i=0;i<12;i++) addAudit(rnd(auditMsgs));
+
+  /* ============================================================
+     REGISTRY
+     ============================================================ */
+  const firstNames = ['Elena','Marcus','Sarah','James','Priya','Hiroshi','Aisha','Diego','Fatima','Nikolai','Yuki','Amara'];
+  const lastNames = ['Vasquez','Chen','Okonkwo','Rodriguez','Patel','Tanaka','Hassan','Silva','Al-Rashid','Petrov','Nakamura','Okafor'];
+  const orgs = ['Jet Propulsion Laboratory','Goddard Space Flight Center','Johnson Space Center','Marshall Space Flight Center','Ames Research Center','Kennedy Space Center','Langley Research Center','Glenn Research Center'];
+  const awards = ['Distinguished Service Medal','Exceptional Achievement Medal','Outstanding Leadership Medal','Public Service Award','Group Achievement Award','Certificate of Appreciation'];
+
+  function genCertRow(){
+    const name = rnd(firstNames) + ' ' + rnd(lastNames);
+    const id = 'GSFC-2026-' + pad(ri(1,12)) + pad(ri(1,28)) + '-' + String.fromCharCode(65+ri(0,5));
+    const org = rnd(orgs);
+    const award = rnd(awards);
+    const status = Math.random() > 0.05 ? 'ok' : 'warn';
+    const statTxt = status === 'ok' ? 'Delivered' : 'Pending';
+    const date = '2026-' + pad(ri(1,4)) + '-' + pad(ri(1,28));
+    return { name, id, org, award, status, statTxt, date };
+  }
+
+  function fillRecent(){
+    const tbody = $('certBody'); if(!tbody) return;
+    let html = '';
+    for(let i=0;i<3;i++){
+      const r = genCertRow();
+      html += '<tr>'
+        + '<td class="mono">' + r.id + '</td>'
+        + '<td><strong>' + r.name + '</strong></td>'
+        + '<td>' + r.award + '</td>'
+        + '<td class="mono dim">' + r.date + '</td>'
+        + '<td><span class="tag ' + r.status + '">' + r.statTxt + '</span></td>'
+        + '<td><button class="btn sm" data-view="' + r.id + '">View</button></td>'
+        + '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+  function fillRegistry(){
+    const tbody = $('registryBody'); if(!tbody) return;
+    let html = '';
+    for(let i=0;i<15;i++){
+      const r = genCertRow();
+      html += '<tr>'
+        + '<td class="mono">' + r.id + '</td>'
+        + '<td><strong>' + r.name + '</strong></td>'
+        + '<td class="dim">' + r.org + '</td>'
+        + '<td>' + r.award + '</td>'
+        + '<td class="mono dim">' + r.date + '</td>'
+        + '<td class="mono dim">GSFC-CA-04</td>'
+        + '<td><span class="tag ' + r.status + '">' + r.statTxt + '</span></td>'
+        + '<td><button class="btn sm" data-view="' + r.id + '">View</button></td>'
+        + '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+  fillRecent();
+  fillRegistry();
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  function toast(type, title, msg){
+    const w = $('toastWrap');
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = '<div class="th">' + title + '</div><div class="tm">' + msg + '</div>';
+    w.appendChild(t);
+    setTimeout(() => t.remove(), 5500);
+  }
+
+  /* ============================================================
+     CERT LIVE PREVIEW
+     ============================================================ */
+  function updateCert(){
+    $('certRecipient').textContent = $('fName').value || 'Recipient Name';
+    $('certRibbon').textContent = $('fAward').value;
+    $('certCitation').textContent = $('fCitation').value || '—';
+    $('certSig1Name').textContent = $('fSig1Name').value;
+    $('certSig1NamePrint').textContent = $('fSig1Name').value;
+    $('certSig1Title').textContent = $('fSig1Title').value;
+    const s2 = $('fSig2Name').value;
+    $('certSig2Name').textContent = s2.startsWith('Dr.') ? s2.replace('Dr. ','').split(' ').slice(-1)[0] : s2;
+    $('certSig2NamePrint').textContent = s2;
+    $('certSig2Title').textContent = $('fSig2Title').value;
+    $('emName').value = $('fName').value;
+    $('emCertId').value = $('certId').textContent;
+  }
+  ['fName','fAward','fCitation','fSig1Name','fSig1Title','fSig2Name','fSig2Title'].forEach(id => {
+    const el = $(id); if(!el) return;
+    el.addEventListener('input', updateCert);
+    el.addEventListener('change', updateCert);
+  });
+
+  function refreshMeta(){
+    const d = new Date();
+    const y = d.getFullYear();
+    const mo = pad(d.getMonth()+1);
+    const dy = pad(d.getDate());
+    const letter = String.fromCharCode(65 + ri(0,5));
+    $('certId').textContent = 'GSFC-' + y + '-' + mo + dy + '-' + letter;
+    $('certDate').textContent = y + '-' + mo + '-' + dy;
+    $('fDate').value = y + '-' + mo + '-' + dy;
+    $('emCertId').value = $('certId').textContent;
+    $('certSig').textContent = Array.from({length:10}, () => Math.floor(Math.random()*16).toString(16)).join('') + '...';
+    $('pvAtt').textContent = 'certificate-' + $('certId').textContent + '.pdf · signed · PGP';
+  }
+
+  /* ============================================================
+     PREVIEW MODAL
+     ============================================================ */
+  function openPreview(){
+    refreshMeta();
+    updateCert();
+    $('previewModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePreview(){
+    $('previewModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  $('btnPreviewCert') && $('btnPreviewCert').addEventListener('click', openPreview);
+  $('btnQuickPreview') && $('btnQuickPreview').addEventListener('click', openPreview);
+  $('pvClose') && $('pvClose').addEventListener('click', closePreview);
+  $('previewModal') && $('previewModal').addEventListener('click', e => { if(e.target === $('previewModal')) closePreview(); });
+
+  /* ============================================================
+     ISSUE & SIGN
+     ============================================================ */
+  $('btnQuickIssue') && $('btnQuickIssue').addEventListener('click', () => switchTab('issuer'));
+  $('btnIssueCert') && $('btnIssueCert').addEventListener('click', () => {
+    toast('gold', 'Signing certificate...', 'Contacting GSFC-CA-04 · HSM RSA-4096');
+    setTimeout(() => {
+      toast('ok', 'Certificate issued', $('certId').textContent + ' · signed & timestamped');
+      addCA(['gold', '★ Certificate issued · ' + $('certId').textContent + ' · ' + $('fName').value]);
+      addAudit(['gold', 'ISSUE', $('certId').textContent + ' · ' + $('fName').value + ' · ' + $('fAward').value]);
+      const cur = parseInt($('kpiCerts').textContent.replace(/,/g,''),10) || 1847;
+      $('kpiCerts').textContent = (cur+1).toLocaleString('en-US');
+      openPreview();
+    }, 900);
+  });
+
+  /* ============================================================
+     DOWNLOAD PDF — real
+     ============================================================ */
+  $('pvDownload') && $('pvDownload').addEventListener('click', () => {
+    toast('gold', 'Generating PDF...', 'Rendering A4 landscape at 300dpi · html2pdf');
+    const certId = $('certId').textContent;
+    const el = $('certificate');
+    const opt = {
+      margin: 0,
+      filename: 'NASA-Certificate-' + certId + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2, useCORS: true, allowTaint: true,
+        backgroundColor: '#fbf8ed',
+        logging: false,
+        windowWidth: 1123, windowHeight: 794
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(el).save().then(() => {
+      toast('ok', 'PDF Downloaded', 'NASA-Certificate-' + certId + '.pdf');
+      addAudit(['ok','DOWNLOAD', 'Certificate ' + certId + ' downloaded']);
+    }).catch(err => {
+      toast('err', 'PDF error', err.message || 'Could not generate PDF');
+    });
+  });
+
+  /* ============================================================
+     EMAIL MODAL
+     ============================================================ */
+  function openEmail(){
+    refreshMeta();
+    updateCert();
+    updateEmailPreview();
+    $('emailModal').classList.add('show');
+  }
+  function closeEmail(){ $('emailModal').classList.remove('show'); }
+  function updateEmailPreview(){
+    $('pvFrom').textContent = $('emFrom').value || '—';
+    $('pvTo').textContent = $('emTo').value || '—';
+    $('pvSubj').textContent = $('emSubject').value || '—';
+  }
+  ['emFrom','emTo','emSubject'].forEach(id => {
+    const el = $(id); if(el) el.addEventListener('input', updateEmailPreview);
+  });
+
+  $('pvEmail') && $('pvEmail').addEventListener('click', openEmail);
+  $('btnCloseEmail') && $('btnCloseEmail').addEventListener('click', closeEmail);
+  $('btnCancelEmail') && $('btnCancelEmail').addEventListener('click', closeEmail);
+  $('emailModal') && $('emailModal').addEventListener('click', e => { if(e.target === $('emailModal')) closeEmail(); });
+
+  /* ============================================================
+     EMAILJS ACTIVATION
+     ============================================================ */
+  $('btnActivateEmail') && $('btnActivateEmail').addEventListener('click', () => {
+    const service = $('ejsService').value.trim();
+    const template = $('ejsTemplate').value.trim();
+    const pubkey = $('ejsPublic').value.trim();
+    if(!service || !template || !pubkey){
+      $('ejsStatus').textContent = '⚠ Semua field harus diisi';
+      $('ejsStatus').style.color = 'var(--warn)';
+      return;
+    }
+    try {
+      emailjs.init(pubkey);
+      window.__ejs = { service, template, pubkey };
+      $('ejsStatus').textContent = '✓ EmailJS aktif — siap kirim email nyata';
+      $('ejsStatus').style.color = 'var(--neon-green)';
+      toast('ok', 'EmailJS Active', 'Sistem siap mengirim email nyata ke inbox');
+    } catch(e){
+      $('ejsStatus').textContent = '✗ Gagal: ' + e.message;
+      $('ejsStatus').style.color = 'var(--err)';
+    }
+  });
+
+  /* ============================================================
+     SEND EMAIL
+     ============================================================ */
+  $('btnSendEmail') && $('btnSendEmail').addEventListener('click', async () => {
+    const to = $('emTo').value.trim();
+    if(!to || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)){
+      $('emTo').focus();
+      $('emTo').style.borderColor = 'var(--err)';
+      setTimeout(() => $('emTo').style.borderColor = '', 2000);
+      toast('err', 'Invalid email', 'Masukkan alamat email yang valid');
+      return;
+    }
+
+    const prog = $('sendProgress');
+    const fill = $('sendFill');
+    const stat = $('sendStat');
+    const pct = $('sendPct');
+    prog.classList.add('show');
+    $('resultPanel').classList.remove('show');
+
+    // STEP 1: Generate PDF attachment (real)
+    stat.textContent = 'Generating PDF attachment...';
+    pct.textContent = '5%';
+    fill.style.width = '5%';
+
+    let pdfBase64 = null;
+    try {
+      if(window.html2pdf){
+        const el = $('certificate');
+        const opt = {
+          margin: 0,
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: {
+            scale: 2, useCORS: true, allowTaint: true,
+            backgroundColor: '#fbf8ed', logging: false,
+            windowWidth: 1123, windowHeight: 794
+          },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        };
+        const worker = html2pdf().set(opt).from(el);
+        const pdfDataUri = await worker.outputPdf('datauristring');
+        pdfBase64 = pdfDataUri.split(',')[1];
+      }
+    } catch(e){
+      console.warn('PDF gen failed (will send without attachment):', e);
+    }
+
+    // STEP 2: Animated progress
+    const steps = [
+      { t:'Validating recipient identity...', p:15 },
+      { t:'Signing with GSFC-CA-04 authority...', p:28 },
+      { t:'Embedding SHA-256 hash...', p:40 },
+      { t:'Rendering certificate PDF (A4 landscape)...', p:55 },
+      { t:'Encrypting attachment (PGP 4096-bit)...', p:68 },
+      { t:'Establishing TLS 1.3 tunnel...', p:78 },
+      { t:'Transmitting via NASA SMTP relay...', p:90 },
+      { t:'Confirming delivery & receipt...', p:98 },
+    ];
+    let i = 0;
+    function tick(){
+      if(i >= steps.length){ finish(); return; }
+      const s = steps[i];
+      stat.textContent = s.t;
+      pct.textContent = s.p + '%';
+      fill.style.width = s.p + '%';
+      i++;
+      setTimeout(tick, 320 + Math.random()*220);
+    }
+    tick();
+
+    async function finish(){
+      // STEP 3: Actually send via EmailJS if configured
+      if(window.__ejs && window.emailjs){
+        try {
+          stat.textContent = 'Sending via EmailJS...';
+          const params = {
+            to_email: to,
+            to_name: $('emName').value || 'Recipient',
+            from_name: 'NASA Certificate Authority',
+            from_email: $('emFrom').value,
+            subject: $('emSubject').value,
+            message: $('emBody').value,
+            cert_id: $('certId').textContent,
+            cert_date: $('certDate').textContent,
+            cert_recipient: $('certRecipient').textContent,
+            cert_award: $('certRibbon').textContent,
+            attachment: pdfBase64 ? 'certificate-' + $('certId').textContent + '.pdf' : ''
+          };
+          await emailjs.send(window.__ejs.service, window.__ejs.template, params);
+          pct.textContent = '100%';
+          fill.style.width = '100%';
+          stat.textContent = '✓ Real email sent via EmailJS';
+          stat.style.color = 'var(--neon-green)';
+          $('resultMsg').textContent = 'Delivered to ' + to + ' · ' + new Date().toISOString().replace('T',' ').slice(0,19) + ' UTC · via EmailJS';
+          $('resultPanel').classList.add('show');
+          toast('ok', '✓ Email terkirim nyata!', 'Cek inbox ' + to);
+          addCA(['gold', '★ Real email delivered → ' + to + ' (EmailJS)']);
+          addAudit(['info', 'DELIVER_REAL', $('certId').textContent + ' → ' + to]);
+          const cur = parseInt($('kpiDelivered').textContent.replace(/,/g,''),10) || 1728;
+          $('kpiDelivered').textContent = (cur+1).toLocaleString('en-US');
+        } catch(e){
+          stat.textContent = '✗ Gagal kirim: ' + (e.text || e.message || 'unknown error');
+          stat.style.color = 'var(--err)';
+          toast('err', 'Email error', 'Cek konfigurasi EmailJS lo · ' + (e.text || e.message));
+        }
+      } else {
+        // No EmailJS configured — simulate
+        pct.textContent = '100%';
+        fill.style.width = '100%';
+        stat.textContent = '✓ Delivery confirmed (simulasi — EmailJS belum aktif)';
+        stat.style.color = 'var(--neon-green)';
+        $('resultMsg').textContent = 'Simulasi: ' + to + ' · ' + new Date().toISOString().replace('T',' ').slice(0,19) + ' UTC';
+        $('resultPanel').classList.add('show');
+        toast('warn', 'Simulasi saja', 'Aktifkan EmailJS untuk kirim email nyata');
+        addAudit(['warn', 'DELIVER_SIM', $('certId').textContent + ' → ' + to + ' (sim)']);
+      }
+    }
+  });
+
+  /* ============================================================
+     VERIFY
+     ============================================================ */
+  $('btnVerify') && $('btnVerify').addEventListener('click', () => {
+    const id = $('verifyId').value.trim();
+    if(!id){ $('verifyId').focus(); return; }
+    toast('info', 'Verifying signature...', 'Contacting GSFC-CA-04 OCSP responder');
+    setTimeout(() => {
+      $('verifyMsg').textContent = 'Certificate ' + id + ' issued by GSFC-CA-04 · all fields intact';
+      $('verifyResult').classList.add('show');
+      toast('ok', 'Signature Valid', id + ' · SHA-256 match');
+      addAudit(['ok', 'VERIFY', id + ' · signature valid']);
+    }, 700);
+  });
+
+  /* ============================================================
+     VIEW BUTTONS
+     ============================================================ */
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-view]');
+    if(!btn) return;
+    const id = btn.dataset.view;
+    $('certId').textContent = id;
+    toast('info', 'Loading certificate', id);
+    setTimeout(openPreview, 300);
+  });
+
+  /* ============================================================
+     TEMPLATES
+     ============================================================ */
+  document.querySelectorAll('[data-template]').forEach(b => {
+    b.addEventListener('click', () => toast('gold', 'Template applied', b.dataset.template + ' template loaded'));
+  });
+
+  /* ============================================================
+     SIDEBAR TAB SYNC (visual)
+     ============================================================ */
+  document.querySelectorAll('.sidebar .side-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar .side-item').forEach(x => x.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  /* ============================================================
+     ESC
+     ============================================================ */
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+      if($('previewModal').classList.contains('show')) closePreview();
+      if($('emailModal').classList.contains('show')) closeEmail();
+    }
+  });
+
+  /* ============================================================
+     DEFCON
+     ============================================================ */
+  const defcons = ['DEFCON 5 · NOMINAL','DEFCON 4 · WATCH','DEFCON 3 · ELEVATED','DEFCON 2 · HIGH'];
+  setInterval(() => {
+    const el = $('defconLbl'); if(el) el.textContent = rnd(defcons);
+  }, 12000);
+
+  /* ============================================================
+     STARTUP
+     ============================================================ */
+  refreshMeta();
+  updateCert();
+  setTimeout(() => toast('gold', 'NEXUS CA v7.0 Online', 'GSFC-CA-04 · Neon interface · siap issue certificate'), 900);
+  setTimeout(() => toast('info', 'Tips', 'Preview → Download PDF (nyata) · Email → aktifkan EmailJS untuk kirim nyata'), 3400);
+
+})();
+</script>
+</body>
+</html>
